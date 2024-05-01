@@ -1,5 +1,6 @@
-import {  useState } from 'react';
-import { Document, pdfjs, Page } from 'react-pdf';
+import {useState} from 'react';
+import {Document, pdfjs, Page} from 'react-pdf';
+import {AnnotationFactory} from 'annotpdf';
 
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -9,6 +10,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 //   import.meta.url,
 // ).toString();
 
+console.log(pdfjs.version)
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 const PdfViewer = () => {
@@ -28,16 +30,17 @@ const PdfViewer = () => {
     // useResizeObserver(containerRef, resizeObserverOptions, onResize);
 
     function onFileChange(event) {
-        const { files } = event.target;
+        const {files} = event.target;
 
         if (files && files[0]) {
             setFile(files[0] || null);
         }
     }
 
-    function onDocumentLoadSuccess({ nextNumPages }) {
+    function onDocumentLoadSuccess({nextNumPages}) {
         setNumPages(nextNumPages);
     }
+
     const options = {
         cMapUrl: '/cmaps/',
         standardFontDataUrl: '/standard_fonts/',
@@ -55,9 +58,9 @@ const PdfViewer = () => {
             <div className="Example__container">
                 <div className="Example__container__load">
                     <label htmlFor="file">Load from file:</label>{' '}
-                    <input onChange={onFileChange} type="file" />
+                    <input onChange={onFileChange} type="file"/>
                 </div>
-                <div className="Example__container__document" >
+                <div className="Example__container__document">
                     <Document file={file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
                         {Array.from(new Array(numPages), (el, index) => (
                             <Page
